@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <link rel="stylesheet" href="style3.css">
+</head>
+
+<body>
+    <div class="slider" aria-label="Image Slider">
+        <div class="slides">
+            <img src="https://picsum.photos/id/1015/800/450" alt="Scenic Mountain" class="active" />
+            <img src="https://picsum.photos/id/1016/800/450" alt="Forest Path" />
+            <img src="https://picsum.photos/id/1035/800/450" alt="Ocean Waves" />
+            <img src="https://picsum.photos/id/1039/800/450" alt="Desert Dunes" />
+        </div>
+        <div class="nav-buttons">
+            <button id="prevBtn" aria-label="Previous Slide">&lt; Previous</button>
+            <button id="nextBtn" aria-label="Next Slide">Next &gt;</button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slides img');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+        const slideCount = slides.length;
+        let autoSlideInterval = null;
+        const slideDuration = 4000; // 4 seconds
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            currentIndex = index;
+        }
+
+        function showNextSlide() {
+            let nextIndex = (currentIndex + 1) % slideCount;
+            showSlide(nextIndex);
+        }
+
+        function showPrevSlide() {
+            let prevIndex = (currentIndex - 1 + slideCount) % slideCount;
+            showSlide(prevIndex);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            showPrevSlide();
+            resetAutoSlide();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            showNextSlide();
+            resetAutoSlide();
+        });
+
+        // Automatic slideshow
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(showNextSlide, slideDuration);
+        }
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+        function resetAutoSlide() {
+            stopAutoSlide();
+            startAutoSlide();
+        }
+
+        // Pause slideshow on mouse enter, resume on mouse leave
+        const slider = document.querySelector('.slider');
+        slider.addEventListener('mouseenter', stopAutoSlide);
+        slider.addEventListener('mouseleave', startAutoSlide);
+
+        // Initialize
+        showSlide(currentIndex);
+        startAutoSlide();
+    </script>
+
+</body>
+
+</html>
